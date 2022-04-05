@@ -1,9 +1,9 @@
 const express = require("express")
 const router = express.Router()
 
-const {  } = require("../controllers/categoryController")
+const {  getItems, getItem, createItem, updateItem, deleteItem } = require("../controllers/categoryController")
 
-router.get("/", );
+router.get("/", getItems);
 
 router.get("/:id", );
 

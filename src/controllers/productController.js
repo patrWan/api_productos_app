@@ -32,7 +32,9 @@ const getItem = (req, res) => { }
 const createItem = async (req, res) => {
     const { body } = req
 
-    res.send({ data });
+    const data = body;
+
+    res.send(data);
 }
 
 /**
