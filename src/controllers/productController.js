@@ -7,11 +7,11 @@ const pool  = require('../database/mysql');
  */
 const getItems = async (req, res) => {
 
-    const q = 'SELECT * FROM product';
+    const q = 'SELECT * FROM product LIMIT 10';
 
     pool.query(q, (err, data) => {
         if (err) console.log(err);
-        res.send({data});
+        res.send(data);
     });
 
     
