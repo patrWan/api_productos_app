@@ -7,13 +7,13 @@ const pool  = require('../database/mysql');
  */
 const getItems = async (req, res) => {
     const LIMIT = 9;
-    const page = req.query.page;
+    const page = req.query.page ? req.query.page : 1;
+
+    const categoryName = req.query.category ? req.query.category : 'bebida energetica';
 
     const start = (page - 1) * LIMIT;
 
-    console.log("page number => "+page);
-
-    const q = 'SELECT * FROM product LIMIT '+start+','+LIMIT+'';
+    const q = 'SELECT product.name, product.url_image, product.price, product.discount FROM product, category WHERE category.name = "'+categoryName+'" AND product.category = category.id LIMIT '+start+','+LIMIT+'';
 
     pool.query(q, (err, data) => {
         if (err) console.log(err);
