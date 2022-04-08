@@ -1,12 +1,12 @@
-const pool  = require('../database/mysql');
+const pool = require('../database/mysql');
 
 /**
  * 
  * @param {*} req 
  * @param {*} res 
  */
-const getItems = async (req, res) => {
-    
+const getItems = (req, res) => {
+
     const page = req.query.page ? req.query.page : 1;
     const categoryName = req.query.category ? req.query.category : 'bebida energetica';
 
@@ -14,24 +14,22 @@ const getItems = async (req, res) => {
     const start = (page - 1) * LIMIT;
 
     let totalPages = 0;
-    pool.query('SELECT COUNT(product.id) AS numberOfProducts FROM product, category WHERE category.name = "'+categoryName+'" AND product.category = category.id', (err, data) => {
+    pool.query('SELECT COUNT(product.id) AS numberOfProducts FROM product, category WHERE category.name = "' + categoryName + '" AND product.category = category.id', (err, data) => {
         if (err) console.log(err);
-        
-        totalPages = Math.ceil(data[0].numberOfProducts / LIMIT);
+        totalPages = data[0].numberOfProducts / LIMIT;
 
-        const q = 'SELECT product.name, product.url_image, product.price, product.discount FROM product, category WHERE category.name = "'+categoryName+'" AND product.category = category.id LIMIT '+start+','+LIMIT+'';
-
+        const q = 'SELECT product.name, product.url_image, product.price, product.discount FROM product, category WHERE category.name = "' + categoryName + '" AND product.category = category.id LIMIT ' + start + ',' + LIMIT + '';
         pool.query(q, (err, data) => {
             if (err) console.log(err);
             res.send({
-                numberOfPages : totalPages,
-                products : data,
+                numberOfPages: Math.ceil(totalPages),
+                products: data,
             });
         });
-
-
     });
-    
+
+
+
 }
 
 /**
@@ -39,12 +37,16 @@ const getItems = async (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getItem = (req, res) => { 
-    console.log(req.params.id);
-    const numberPage = req.query.page;
-    
+const getItemByName = (req, res) => {
+    const productName = req.query.product_name;
 
-    res.send({page : numberPage});
+    const q = 'SELECT product.name, product.url_image, product.price, product.discount FROM product WHERE product.name LIKE "%'+productName+'%"';
+    pool.query(q, (err, data) => {
+        if (err) console.log(err);
+        res.send({
+            products: data,
+        });
+    });
 }
 
 /**
@@ -74,4 +76,4 @@ const updateItem = (req, res) => { }
  */
 const deleteItem = (req, res) => { }
 
-module.exports = { getItems, getItem, createItem, updateItem, deleteItem };
+module.exports = { getItems, getItemByName, createItem, updateItem, deleteItem };
