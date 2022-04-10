@@ -13,10 +13,6 @@ const getItems = (req, res) => {
 
     const LIMIT = 9;
     const start = (page - 1) * LIMIT;
-
-    console.log("query page => "+ req.query.page );
-    console.log("query categoryName => "+req.query.category);
-    console.log("query productName => "+req.query.product_name);
     
     var q = '';
     if(req.query.page === '' && req.query.category === ''){
