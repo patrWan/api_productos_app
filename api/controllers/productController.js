@@ -27,7 +27,7 @@ const getItems = (req, res) => {
 
 
         pool.query(q, (err, data) => {
-            if (err) console.log(err);
+            if (err) res.send('Ha ocurrido un error en el servidor, por favor contacte con el administrador.');
             res.send({
                 numberOfPages: Math.ceil(totalPages),
                 products: data,
@@ -47,10 +47,10 @@ const getItems = (req, res) => {
 const getItemByName = (req, res) => {
     const productName = req.query.product_name;
     const orderByName = req.query.name ? req.query.name : 'ASC';
-    
+
     const q = 'SELECT product.name, product.url_image, product.price, product.discount FROM product WHERE product.name LIKE "%' + productName + '%" ORDER BY product.name '+orderByName+'';
     pool.query(q, (err, data) => {
-        if (err) console.log(err);
+        if (err) res.send('Ha ocurrido un error en el servidor, por favor contacte con el administrador.');
         res.send({
             products: data,
         });
